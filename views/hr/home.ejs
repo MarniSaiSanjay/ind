@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <button><a href="/hr/add" style="text-decoration: none; color: black;background-color: whitesmoke;">Add</a></button>
+    <% for(let i of interns){ %> 
+        <h2><%= i.name  %></h2>
+        <h3><%= i.stipend %></h3>
+        <!-- <button type="submit"></button> -->
+        <a href="/hr/<%= i.id %>">Update</a>
+        <form action="/hr/<%= i.id %>?_method=DELETE" method="post">
+            <button type="submit">Delete</button>
+        </form>
+
+    <% } %> 
+
+    <button><a href="/users/logout">LogOut</a></button>
+</body>
+</html>
