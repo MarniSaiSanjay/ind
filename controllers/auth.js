@@ -1,3 +1,4 @@
+const { status } = require('express/lib/response');
 const User = require('../models/hr');
 
 module.exports.login_get = (req,res) => {
@@ -16,6 +17,7 @@ module.exports.register_get = (req,res) => {
 }
 
 module.exports.register_post = async (req, res, next) => {
+    console.log(req.body);
     const { email, username, password, password2 } = req.body;
 
     if (!username || !email || !password2 || !password) {
@@ -38,7 +40,8 @@ module.exports.register_post = async (req, res, next) => {
             req.login(registerUser, err => { // as we use isLoggedIn to home page, it will not take us to home page after singUp as we are not logged in, so to avoid to manually login after signUp we are loggin them here only.
                 if(err) return next(err);
                 // req.flash( 'success','Welcome');
-                res.redirect('/home');
+                //res.redirect('/home');
+                res.sendStatus(200);
             })
         }catch(e){
             // req.flash('error', e.message); // if error it would be better to flash it, than taking user to error page.

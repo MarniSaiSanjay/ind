@@ -1,10 +1,14 @@
+if (process.env.NODE_ENV != "production") { // if the environment we are running on is not 'production' (i.e. 'development'), then require the 'dotenv' package and take the variables we added there add them into 'process.env' in this node app. In production we don't do in this way.
+    require('dotenv').config();
+}
+
 const express = require("express");
 const app = express();
 const path = require('path');
 const ejsMate = require('ejs-mate');
 const methodOverride = require('method-override'); 
 const session = require('express-session');
-
+const cors=require("cors");
 // for passport
 const passport = require('passport');
 const LocalStrategy = require('passport-local');
@@ -14,8 +18,10 @@ const mongoose = require('mongoose');
 
 mongoose.Promise = global.Promise;
 
+const dbURL = process.env.DB_URL || 'mongodb://localhost:27017/indulge';
+
 // Connect MongoDB at default port 27017.
-mongoose.connect('mongodb://localhost:27017/indulge', {
+mongoose.connect(dbURL, {
     useNewUrlParser: true,
     useUnifiedTopology: true
 }, (err) => {
@@ -32,6 +38,13 @@ const Intern = require('./models/intern');
 app.set('view engine', 'ejs');
 app.engine('ejs', ejsMate);
 app.set('views', path.join(__dirname, "views"));
+   app.use(
+       cors({
+        origin: "http://localhost:3000", // allow to server to accept request from different origin
+        methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+        credentials: true // allow session cookie from browser to pass through
+       })
+    );
 
 
 app.use(express.static(path.join(__dirname, 'public')));
@@ -102,5 +115,5 @@ app.delete('/hr/:id', async(req,res) => {
     res.redirect('/home');
 })
 
-const port = 3000;
+const port = 4000;
 app.listen(port);
